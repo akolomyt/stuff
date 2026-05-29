@@ -1,0 +1,21 @@
+name: Fetch Sleeper Draft Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run fetch script
+        run: python3 fetch_draft.py
+
+      - name: Commit and push output files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add league.json users.json rosters.json draft.json picks.json players.json draft_summary.md
+          git commit -m "Add Sleeper draft data export" || echo "Nothing to commit"
+          git push
